@@ -126,6 +126,61 @@ test('contrastRatio implements the WCAG luminance formula', () => {
   assert.ok(Math.abs(a - b) < 1e-9);
 });
 
+test('fontSizePx converts px, pt, em, rem and percent', () => {
+  const { fontSizePx } = load('fontSizePx');
+  assert.equal(fontSizePx('24px'), 24);
+  assert.equal(fontSizePx('18.66px'), 18.66);
+  assert.equal(fontSizePx('2em'), 32);
+  assert.equal(fontSizePx('1.5rem'), 24);
+  assert.equal(fontSizePx('150%'), 24);
+  assert.equal(fontSizePx('18pt'), 24);
+  assert.equal(fontSizePx('large'), null);
+  assert.equal(fontSizePx(''), null);
+});
+
+test('isLargeText applies WCAG large-text thresholds', () => {
+  const { isLargeText } = load('isLargeText');
+  assert.ok(isLargeText(24, false));
+  assert.ok(!isLargeText(23.9, false));
+  assert.ok(isLargeText(18.66, true));
+  assert.ok(isLargeText(19, true));
+  assert.ok(!isLargeText(18.5, true));
+  assert.ok(!isLargeText(18.66, false));
+  assert.ok(!isLargeText(null, true));
+});
+
+test('parseCssRules extracts declarations and skips at-rules', () => {
+  const { parseCssRules } = load('parseCssRules');
+  const rules = parseCssRules('body { background-color: #07131f; } p { color: #999; font-size: 14px; } /* c */ @media (min-width: 600px) { div { color: red; } } .b::placeholder { color: #aaa; }');
+  const body = rules.find(r => r.selector === 'body');
+  const p = rules.find(r => r.selector === 'p');
+  assert.equal(body.decls['background-color'], '#07131f');
+  assert.equal(p.decls['color'], '#999');
+  assert.ok(!rules.some(r => r.selector.startsWith('@')));
+  assert.ok(!rules.some(r => r.selector.includes('::placeholder')));
+});
+
+test('inlineDecls parses style attributes tolerantly', () => {
+  const { inlineDecls } = load('inlineDecls');
+  const d = inlineDecls('color:#333;background: white ; font-size:12PX');
+  assert.equal(d['color'], '#333');
+  assert.equal(d['background'], 'white');
+  assert.equal(d['font-size'], '12PX');
+  assert.deepEqual(inlineDecls(null), {});
+  assert.deepEqual(inlineDecls('nonsense'), {});
+});
+
+test('hasDirectText ignores element-only children', () => {
+  const { hasDirectText } = load('hasDirectText');
+  // Pure-text nodes via a tiny DOM shim.
+  const text = (s) => ({ nodeType: 3, textContent: s });
+  const el = (s) => ({ nodeType: 1 });
+  assert.ok(hasDirectText({ childNodes: [text(' hi ')] }));
+  assert.ok(!hasDirectText({ childNodes: [text('   ')] }));
+  assert.ok(!hasDirectText({ childNodes: [el()] }));
+  assert.ok(hasDirectText({ childNodes: [el(), text('x')] }));
+});
+
 test('app.js no longer uses legacy escape/unescape globals', () => {
   assert.ok(!/\b(unescape|escape)\s*\(/.test(src), 'escape/unescape should be replaced');
 });
