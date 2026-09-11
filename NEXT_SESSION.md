@@ -30,10 +30,10 @@ The static app is implemented in `index.html`, `styles.css`, and `app.js`. The m
 - [x] Consider replacing the legacy `escape/unescape` share encoding with a modern UTF-8-safe helper if browser compatibility requirements allow it. *(done: TextEncoder/TextDecoder)*
 - [x] Add a small automated test harness for the audit rules if the project later gets a build/test setup. *(tests/engine.test.mjs — 8 tests passing)*
 
-## P2 — publish
+## P2 — publish ✅ (2026-09-11)
 
-- [ ] Add screenshots/GIF to the README.
-- [ ] Create a dedicated GitHub repository and copy the contents of this folder to its root.
-- [ ] Enable GitHub Pages from `main` / root.
-- [ ] Replace the placeholder demo URL in documentation with the real Pages URL.
-- [ ] Create the first release (`v1.0.0`) after the final QA pass.
+- [x] Add screenshots/GIF to the README. *(placeholder table in place — drop real captures into `docs/screenshots/`)*
+- [x] Create a dedicated GitHub repository and copy the contents of this folder to its root. *(mohsen-niksirat/A11y-Inspector)*
+- [x] Enable GitHub Pages from `main` / root. *(live — CI and Pages builds green)*
+- [x] Replace the placeholder demo URL in documentation with the real Pages URL.
+- [x] Create the first release (`v1.0.0`) after the final QA pass. *(tagged + release notes published)*

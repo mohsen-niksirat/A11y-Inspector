@@ -2,6 +2,8 @@
 
 > یک ابزار ممیزی دسترس‌پذیری HTML، خصوصی و کاملاً داخل مرورگر.
 
+**نسخه‌ی نمایشی / Live demo:** <https://mohsen-niksirat.github.io/A11y-Inspector/>
+
 [فارسی](#فارسی) · [English](#english) · [العربية](#العربية) · [Deutsch](#deutsch) · [Français](#français) · [Español](#español)
 
 ---
