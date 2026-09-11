@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07131f">
+  <meta name="description" content="A11y Inspector — a privacy-first browser accessibility audit tool">
+  <title>A11y Inspector</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-to-app" href="#mainContent" data-i18n="skipToApp">پرش به محتوای اصلی</a>
+  <div class="app-shell">
+    <header class="topbar" aria-label="Application header">
+      <a class="brand" href="#top" aria-label="A11y Inspector">
+        <span class="brand-mark" aria-hidden="true">⌁</span>
+        <span><strong>A11y Inspector</strong><small data-i18n="brandSub">ممیزی دسترس‌پذیری، خصوصی و داخل مرورگر</small></span>
+      </a>
+      <div class="top-actions">
+        <span class="privacy-pill"><i aria-hidden="true"></i><span data-i18n="localOnly">۱۰۰٪ محلی</span></span>
+        <span class="status-badge" id="statusBadge"><i aria-hidden="true"></i><span id="statusText" data-i18n="readyToAudit">آماده ممیزی</span></span>
+        <button class="button ghost" id="shareBtn" type="button" data-i18n="share">↗ اشتراک‌گذاری</button>
+        <label class="sr-only" for="languageSelect" data-i18n="languageLabel">زبان</label>
+        <select class="language-select" id="languageSelect" aria-label="Language">
+          <option value="fa">فارسی</option><option value="en">English</option><option value="ar">العربية</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option>
+        </select>
+        <button class="icon-button" id="themeBtn" type="button" aria-label="Toggle theme" title="Toggle theme">☼</button>
+      </div>
+    </header>
+
+    <main id="mainContent">
+      <section class="panel hero" id="top" aria-labelledby="heroTitle">
+        <div class="hero-copy">
+          <span class="eyebrow">WCAG • DOM • PRIVACY-FIRST</span>
+          <h1 id="heroTitle" data-i18n="heroTitle">قبل از انتشار، تجربه‌ی همه را بررسی کن.</h1>
+          <p data-i18n="heroText">کد HTML را وارد کن، یک ممیزی سریع و قابل توضیح بگیر و هر مشکل را مستقیماً در Preview ببین. هیچ کدی از مرورگرت خارج نمی‌شود.</p>
+          <div class="hero-chips" aria-label="Technology highlights"><span>DOMParser</span><span>WCAG 2.1</span><span>sandboxed iframe</span><span>no backend</span></div>
+        </div>
+        <div class="hero-orbit" aria-hidden="true"><div class="orbit-ring"></div><div class="orbit-core">A11Y</div><i class="orbit-dot dot-a"></i><i class="orbit-dot dot-b"></i><i class="orbit-dot dot-c"></i></div>
+      </section>
+
+      <section class="input-grid" aria-label="Audit input and summary">
+        <section class="panel source-panel" aria-labelledby="sourceTitle">
+          <div class="section-heading"><div><span class="section-kicker">01 / INPUT</span><h2 id="sourceTitle" data-i18n="sourceTitle">کد HTML را وارد کن</h2><p data-i18n="sourceHint">Paste، آپلود یا Drop کن؛ پردازش کاملاً داخل همین صفحه انجام می‌شود.</p></div><span class="meta" id="auditTime">—</span></div>
+          <label class="drop-zone" id="dropZone" for="fileInput"><span class="drop-icon" aria-hidden="true">⇩</span><strong data-i18n="dropTitle">فایل HTML را اینجا رها کن</strong><small data-i18n="dropHint">یا برای انتخاب فایل کلیک کن · حداکثر ۲MB</small></label>
+          <input id="fileInput" type="file" accept=".html,.htm,text/html">
+          <div class="sample-row"><span data-i18n="samples">نمونه‌ها:</span><button class="chip-button" type="button" data-sample="problem" data-i18n="sampleProblem">صفحه‌ی مشکل‌دار</button><button class="chip-button" type="button" data-sample="clean" data-i18n="sampleClean">صفحه‌ی سالم</button><button class="chip-button" type="button" data-sample="form" data-i18n="sampleForm">فرم پیچیده</button></div>
+          <div class="source-toolbar"><span class="section-kicker" data-i18n="editorLabel">HTML EDITOR</span><span class="meta" id="charCount">0 chars</span></div>
+          <textarea id="sourceEditor" class="source-editor mono" spellcheck="false" aria-label="HTML source"></textarea>
+          <div class="editor-footer"><label class="toggle-label"><input id="liveAudit" type="checkbox"><span class="toggle" aria-hidden="true"></span><span data-i18n="liveAudit">ممیزی هنگام تایپ</span></label><div class="button-row"><button class="button ghost" id="resetBtn" type="button" data-i18n="reset">پاک کردن</button><button class="button primary" id="auditBtn" type="button">◉ <span data-i18n="audit">شروع ممیزی</span></button></div></div>
+          <div class="shortcut"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> <span data-i18n="runShortcut">برای ممیزی</span> · <span data-i18n="privacyHint">کد شما ذخیره یا ارسال نمی‌شود.</span></div>
+        </section>
+
+        <section class="panel summary-panel" aria-labelledby="summaryTitle">
+          <div class="section-heading"><div><span class="section-kicker">02 / SIGNAL</span><h2 id="summaryTitle" data-i18n="summaryTitle">خلاصه‌ی ممیزی</h2><p data-i18n="summaryHint">شدت مشکلات را اولویت‌بندی کن، بعد سراغ جزئیات برو.</p></div><span class="meta" id="ruleCount">0 rules</span></div>
+          <div class="score-layout"><div class="score-ring" id="scoreRing"><div><strong id="scoreValue">—</strong><span data-i18n="score">امتیاز</span></div></div><div class="score-copy"><strong id="scoreLabel" data-i18n="notAudited">هنوز ممیزی نشده</strong><p id="scoreHint" data-i18n="scoreHint">یک نمونه انتخاب کن یا HTML خودت را وارد کن.</p><div class="standards"><span>WCAG 2.1 AA</span><span>Best practices</span><span>HTML semantics</span></div></div></div>
+          <div class="metric-grid"><div class="metric error-metric"><span class="metric-icon">!</span><div><small data-i18n="errors">خطاها</small><strong id="errorCount">0</strong></div></div><div class="metric warning-metric"><span class="metric-icon">△</span><div><small data-i18n="warnings">هشدارها</small><strong id="warningCount">0</strong></div></div><div class="metric notice-metric"><span class="metric-icon">i</span><div><small data-i18n="notices">نکته‌ها</small><strong id="noticeCount">0</strong></div></div><div class="metric passed-metric"><span class="metric-icon">✓</span><div><small data-i18n="passed">موفق</small><strong id="passedCount">0</strong></div></div></div>
+          <div class="progress-bar" aria-hidden="true"><span id="scoreProgress"></span></div><div class="summary-actions"><button class="button" id="exportJsonBtn" type="button" disabled>JSON ↓ <span data-i18n="report">گزارش</span></button><button class="button" id="exportHtmlBtn" type="button" disabled>HTML ↓ <span data-i18n="report">گزارش</span></button><button class="button primary" id="fixAllBtn" type="button" disabled>✦ <span data-i18n="fixSafe">اصلاح‌های امن</span></button></div>
+        </section>
+      </section>
+
+      <section class="work-grid">
+        <section class="panel findings-panel" aria-labelledby="findingsTitle"><div class="finding-toolbar"><div><span class="section-kicker">03 / FINDINGS</span><h2 id="findingsTitle" data-i18n="findingsTitle">یافته‌ها و پیشنهادها</h2><p id="findingMeta" data-i18n="findingEmptyHint">بعد از ممیزی، هر مورد را باز کن تا عنصر مربوط را در Preview ببینی.</p></div><div class="filters"><input id="findingSearch" class="text-input search-input" type="search" data-i18n-placeholder="searchPlaceholder" placeholder="جستجو در یافته‌ها" aria-label="Search findings"><select id="severityFilter" class="select-input" aria-label="Severity filter"><option value="all" data-i18n="allSeverities">همه شدت‌ها</option><option value="error" data-i18n="errors">خطاها</option><option value="warning" data-i18n="warnings">هشدارها</option><option value="notice" data-i18n="notices">نکته‌ها</option><option value="pass" data-i18n="passed">موفق</option></select></div></div><div id="findingList"><div class="empty" data-i18n="findingEmpty">برای دیدن گزارش، یک ممیزی اجرا کن.</div></div></section>
+        <section class="panel preview-panel" aria-labelledby="previewTitle"><div class="section-heading"><div><span class="section-kicker">04 / PREVIEW</span><h2 id="previewTitle" data-i18n="previewTitle">Preview امن و تعاملی</h2><p data-i18n="previewHint">روی هر یافته کلیک کن تا محل آن با کادر قرمز مشخص شود.</p></div><span class="sandbox-badge">sandboxed</span></div><div class="preview-frame-wrap"><div class="preview-loading hidden" id="previewLoading"><span class="loader"></span><span data-i18n="previewLoading">در حال ساخت Preview...</span></div><iframe id="previewFrame" title="A11y preview" sandbox="allow-same-origin"></iframe></div><div class="preview-footer"><span><i class="legend-dot problem" aria-hidden="true"></i><span data-i18n="highlightLegend">عنصر انتخاب‌شده</span></span><button class="button ghost" id="openPreviewBtn" type="button" data-i18n="openPreview">باز کردن در تب جدید</button></div></section>
+      </section>
+
+      <section class="panel report-panel" aria-labelledby="reportTitle"><div class="section-heading"><div><span class="section-kicker">05 / REPORT</span><h2 id="reportTitle" data-i18n="reportTitle">گزارش قابل تحویل</h2><p data-i18n="reportHint">خلاصه‌ای مناسب برای Ticket، Pull Request یا رزومه.</p></div><button class="button ghost" id="copyReportBtn" type="button" disabled data-i18n="copyReport">کپی گزارش</button></div><div class="report-content"><div><h3 data-i18n="whatFound">چه چیزی پیدا شد؟</h3><p id="reportSummary" data-i18n="reportEmpty">پس از ممیزی، خلاصه‌ی قابل کپی اینجا نمایش داده می‌شود.</p><ul id="reportList"></ul></div><div><h3 data-i18n="fixStrategy">راهبرد اصلاح</h3><p id="fixSummary" data-i18n="fixEmpty">هر اصلاح خودکار محدود و قابل توضیح است؛ تصمیم‌های معنایی را به توسعه‌دهنده می‌سپاریم.</p><ul id="fixList"></ul></div></div></section>
+    </main>
+    <footer class="footer-note">🔒 <span data-i18n="footerPrivacy">A11y Inspector بدون Backend است. HTML در حافظه‌ی مرورگر تحلیل می‌شود و Preview در iframe sandboxed نمایش داده می‌شود.</span></footer>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="modal-backdrop" id="fixModal" role="dialog" aria-modal="true" aria-labelledby="fixModalTitle"><div class="modal"><h2 id="fixModalTitle" data-i18n="fixModalTitle">اصلاح‌های امن اعمال شدند</h2><p data-i18n="fixModalHint">این تغییرها محافظه‌کارانه هستند و HTML اصلاح‌شده دوباره ممیزی شده است.</p><ul id="fixListModal"></ul><pre id="fixPreviewCode" class="code-preview">—</pre><div class="modal-footer"><button class="button primary" id="closeModal" type="button" data-i18n="close">بستن</button></div></div></div>
+  <script src="app.js"></script>
+</body>
+</html>

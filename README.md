@@ -1,0 +1,206 @@
+# A11y Inspector
+
+> یک ابزار ممیزی دسترس‌پذیری HTML، خصوصی و کاملاً داخل مرورگر.
+
+[فارسی](#فارسی) · [English](#english) · [العربية](#العربية) · [Deutsch](#deutsch) · [Français](#français) · [Español](#español)
+
+---
+
+## فارسی
+
+A11y Inspector یک ابزار Static برای بررسی اولیه‌ی دسترس‌پذیری HTML است. کد شما با `DOMParser` داخل مرورگر تحلیل می‌شود، نتیجه با Severity و Selector نمایش داده می‌شود و عنصر مرتبط در یک `iframe sandboxed` قابل مشاهده است.
+
+### امکانات
+
+- ورود HTML با Paste، آپلود فایل یا Drag & Drop
+- سه نمونه‌ی آماده برای صفحه‌ی مشکل‌دار، صفحه‌ی سالم و فرم
+- بررسی `lang`، `title`، `alt` تصویر، نام قابل دسترس فرم، دکمه و لینک
+- بررسی ترتیب Heading، `main`، شناسه‌های تکراری، ارجاع‌های ARIA و `tabindex`
+- بررسی جدول، iframe، Skip Link و viewport
+- امتیاز ۰ تا ۱۰۰، زمان اجرا و شمارش Error/Warning/Notice/Passed
+- جستجو و فیلتر یافته‌ها
+- Highlight عنصر واقعی در Preview
+- اصلاح امن محدود برای `lang`، `title` و عنوان iframe؛ متن alt حدس زده نمی‌شود
+- خروجی JSON و HTML و کپی گزارش
+- Share Link برای HTMLهای کوچک
+- فارسی، انگلیسی، عربی، آلمانی، فرانسوی و اسپانیایی با RTL/LTR واقعی
+- Dark/Light theme و طراحی Responsive
+
+### اجرا
+
+هیچ نصب یا Backend لازم نیست. فایل `index.html` را با یک Static Server باز کن:
+
+```bash
+python -m http.server 4173 --directory A11y-Inspector
+```
+
+سپس به `http://localhost:4173` برو. بازکردن مستقیم فایل هم معمولاً کار می‌کند، اما Static Server برای Preview و Share قابل‌اعتمادتر است.
+
+### Deploy روی GitHub Pages
+
+محتویات پوشه‌ی `A11y-Inspector` را در یک Repository قرار بده و از مسیر زیر فعال کن:
+
+`Settings → Pages → Deploy from a branch → main → /(root)`
+
+این پروژه به سرویس خارجی نیاز ندارد و برای GitHub Pages مناسب است.
+
+### حریم خصوصی و محدودیت‌ها
+
+- HTML به سرور ارسال نمی‌شود و در LocalStorage ذخیره نمی‌شود.
+- LocalStorage فقط زبان و Theme را نگه می‌دارد.
+- Preview با `iframe sandbox="allow-same-origin"` اجرا می‌شود و Scriptهای ورودی اجازه‌ی اجرا ندارند.
+- این ابزار جایگزین تست با صفحه‌خوان، کیبورد، کنتراست واقعی و بررسی انسانی نیست.
+- Share Link محتوای HTML را در Hash آدرس قرار می‌دهد؛ برای کدهای حساس از Share استفاده نکن.
+
+---
+
+## English
+
+A11y Inspector is a static, privacy-first HTML accessibility checker. It parses your markup with `DOMParser` in the browser, reports explainable findings with severity and selectors, and shows the related element inside a sandboxed Preview.
+
+### Features
+
+- Paste, file upload, and drag-and-drop HTML input
+- Problem, accessible, and complex-form samples
+- Checks for `lang`, `title`, image `alt`, accessible names, headings, main landmark, duplicate IDs, ARIA references, positive `tabindex`, tables, iframes, skip links, and viewport
+- 0–100 score with Error/Warning/Notice/Passed counts and audit duration
+- Search and severity filtering
+- Element highlighting in the Preview
+- Conservative safe fixes for missing `lang`, document `title`, and iframe titles
+- JSON and HTML report downloads plus copyable report text
+- Hash-based share links for small HTML documents
+- Persian, English, Arabic, German, French, and Spanish with real RTL/LTR switching
+- Dark/light theme and responsive layout
+
+### Run locally
+
+```bash
+python -m http.server 4173 --directory A11y-Inspector
+```
+
+Open `http://localhost:4173`. No package manager, build step, or backend is required.
+
+### GitHub Pages
+
+Upload the contents of `A11y-Inspector` to a repository, then enable `Settings → Pages → Deploy from a branch`, using the `main` branch and the root folder.
+
+### Privacy and scope
+
+HTML is analyzed locally and is not uploaded or persisted. Only language and theme preferences use LocalStorage. The Preview is rendered in a sandboxed iframe with scripts disabled. This is an initial automated audit, not a replacement for keyboard, screen-reader, contrast, zoom, and human testing. Share links put HTML in the URL hash, so do not share sensitive markup.
+
+---
+
+## العربية
+
+A11y Inspector أداة ثابتة وفورية لفحص إمكانية الوصول إلى HTML داخل المتصفح. يتم تحليل الشفرة محلياً باستخدام `DOMParser`، وتظهر النتائج مع مستوى الخطورة والمسار، ويمكن إبراز العنصر داخل معاينة آمنة.
+
+### المزايا
+
+- لصق HTML أو رفعه أو سحبه وإفلاته
+- أمثلة لصفحة بها مشكلات وصفحة سليمة ونموذج معقد
+- فحص اللغة والعنوان و`alt` والصور وأسماء عناصر النماذج والأزرار والروابط
+- فحص العناوين و`main` والمعرّفات المكررة ومراجع ARIA و`tabindex` والجداول وiframe ورابط التخطي وviewport
+- درجة من 0 إلى 100 مع عدادات الأخطاء والتحذيرات والملاحظات والاختبارات الناجحة
+- البحث والتصفية وإبراز العناصر وتصدير JSON وHTML
+- إصلاحات محافظة للغة والعنوان وعناوين iframe
+- ست لغات مع دعم RTL/LTR ومظهر داكن وفاتح
+
+### التشغيل والنشر
+
+```bash
+python -m http.server 4173 --directory A11y-Inspector
+```
+
+يمكن نشر المجلد مباشرة على GitHub Pages من الفرع `main` والمجلد الجذر. لا يوجد خادم أو تثبيت مطلوب.
+
+### الخصوصية
+
+لا يتم إرسال HTML إلى أي خادم ولا يتم حفظه. يتم حفظ اللغة والمظهر فقط. المعاينة تعمل داخل iframe معزول. رابط المشاركة يضع HTML في جزء العنوان، لذلك لا تستخدمه مع محتوى حساس.
+
+---
+
+## Deutsch
+
+A11y Inspector ist ein statisches, datenschutzfreundliches Prüfwerkzeug für HTML-Barrierefreiheit. Das Markup wird mit `DOMParser` lokal im Browser analysiert und die betroffenen Elemente erscheinen in einer sicheren Vorschau.
+
+### Funktionen
+
+- HTML einfügen, hochladen oder per Drag & Drop öffnen
+- Beispiele für problematische, zugängliche und komplexe Formulare
+- Prüfungen für Sprache, Seitentitel, Bild-Alternativtext, zugängliche Namen, Überschriften, Main-Landmark, doppelte IDs, ARIA-Referenzen, positive `tabindex`-Werte, Tabellen, iframes, Skip-Link und viewport
+- Score von 0 bis 100, Filter, Suche und Element-Highlighting
+- JSON-/HTML-Berichte und konservative Korrekturen
+- Persisch, Englisch, Arabisch, Deutsch, Französisch und Spanisch mit RTL/LTR-Unterstützung
+- Dark-/Light-Theme und Responsive Design
+
+### Start und Deployment
+
+```bash
+python -m http.server 4173 --directory A11y-Inspector
+```
+
+Danach `http://localhost:4173` öffnen. Der Ordner kann direkt über GitHub Pages aus `main` und dem Root-Verzeichnis veröffentlicht werden. Es gibt kein Backend.
+
+### Datenschutz
+
+HTML verlässt den Browser nicht und wird nicht gespeichert. Nur Sprache und Theme werden lokal gemerkt. Die Vorschau läuft in einem sandboxed iframe. Share-Links legen HTML in den URL-Hash und sind daher nicht für vertrauliche Inhalte gedacht.
+
+---
+
+## Français
+
+A11y Inspector est un outil statique et respectueux de la vie privée pour auditer l’accessibilité HTML. Le code est analysé localement avec `DOMParser`, puis les résultats sont affichés avec leur gravité, leur sélecteur et une prévisualisation sécurisée.
+
+### Fonctionnalités
+
+- Coller, importer ou déposer du HTML
+- Exemples de page problématique, accessible et formulaire complexe
+- Vérifications de `lang`, du titre, des textes `alt`, des noms accessibles, des titres, du landmark principal, des IDs dupliqués, des références ARIA, de `tabindex`, des tableaux, iframes, liens d’évitement et viewport
+- Score de 0 à 100, recherche, filtres et surbrillance dans l’aperçu
+- Rapports JSON/HTML et corrections automatiques prudentes
+- Six langues avec bascule RTL/LTR, thème sombre/clair et interface responsive
+
+### Utilisation et GitHub Pages
+
+```bash
+python -m http.server 4173 --directory A11y-Inspector
+```
+
+Ouvrez `http://localhost:4173`, puis publiez le dossier directement avec GitHub Pages depuis `main` et la racine. Aucun serveur applicatif n’est nécessaire.
+
+### Confidentialité
+
+Le HTML reste dans le navigateur et n’est pas enregistré. Seules la langue et le thème sont mémorisés. L’aperçu utilise un iframe sandboxé. Les liens de partage placent le HTML dans le hash de l’URL; évitez-les pour les données sensibles.
+
+---
+
+## Español
+
+A11y Inspector es una herramienta estática y privada para auditar la accesibilidad de HTML. Analiza el marcado localmente con `DOMParser`, muestra hallazgos explicables y permite ver el elemento relacionado en una vista previa aislada.
+
+### Funciones
+
+- Pegar, subir o arrastrar HTML
+- Ejemplos de página problemática, accesible y formulario complejo
+- Revisiones de idioma, título, `alt`, nombres accesibles, encabezados, landmark principal, IDs duplicados, referencias ARIA, `tabindex`, tablas, iframes, enlace de salto y viewport
+- Puntuación de 0 a 100, búsqueda, filtros y resaltado de elementos
+- Informes JSON/HTML, copia del informe y correcciones seguras limitadas
+- Seis idiomas, RTL/LTR, tema oscuro/claro y diseño responsive
+
+### Uso y publicación
+
+```bash
+python -m http.server 4173 --directory A11y-Inspector
+```
+
+Abre `http://localhost:4173`. Puedes publicar la carpeta directamente en GitHub Pages desde `main` y la raíz. No hay backend ni instalación.
+
+### Privacidad
+
+El HTML no sale del navegador ni se guarda. Solo se almacenan el idioma y el tema. La vista previa usa un iframe sandboxed. Los enlaces compartidos incluyen el HTML en el hash de la URL; no los uses con contenido confidencial.
+
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE).
