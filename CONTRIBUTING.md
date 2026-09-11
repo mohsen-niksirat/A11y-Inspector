@@ -70,7 +70,7 @@ python -m http.server 4173
 # then open http://localhost:4173
 ```
 
-Node 18+ is required for the tests:
+Node 22+ is required for the tests (jsdom 30 needs it; CI runs Node 24):
 
 ```bash
 npm test        # audit engine tests

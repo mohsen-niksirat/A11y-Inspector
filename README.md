@@ -48,7 +48,7 @@ python -m http.server 4173 --directory A11y-Inspector
 
 ### اجرای CLI بدون مرورگر
 
-موتور ممیزی بدون رابط کاربری هم اجرا می‌شود (نیازمند Node 18+ و `npm install` برای jsdom):
+موتور ممیزی بدون رابط کاربری هم اجرا می‌شود (نیازمند Node 22+ و `npm install` برای jsdom):
 
 ```bash
 node cli.mjs page.html --json     # خروجی JSON
@@ -117,7 +117,7 @@ Open `http://localhost:4173`. No package manager, build step, or backend is requ
 
 ### Headless CLI
 
-The audit engine also runs without the UI (Node 18+, `npm install` for jsdom):
+The audit engine also runs without the UI (Node 22+, `npm install` for jsdom):
 
 ```bash
 node cli.mjs page.html --json     # machine-readable JSON
