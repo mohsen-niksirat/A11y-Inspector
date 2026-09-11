@@ -1,6 +1,6 @@
 {
   "name": "a11y-inspector",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Privacy-first, browser-only HTML accessibility audit tool with sandboxed preview, safe fixes, and multilingual UI.",
   "private": true,
   "type": "module",

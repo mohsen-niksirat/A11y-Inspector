@@ -25,7 +25,7 @@ A11y Inspector یک ابزار Static برای بررسی اولیه‌ی دست
 - اصلاح امن محدود برای `lang`، `title` و عنوان iframe؛ متن alt حدس زده نمی‌شود
 - خروجی JSON و HTML و کپی گزارش
 - Share Link برای HTMLهای کوچک
-- بررسی کنتراست متن و اجزای رابط با نسبت محاسبه‌شده (WCAG 1.4.3): رنگ‌های inline و کلاس‌ها و بلوک‌های `<style>`، آستانه‌ی ۳ به ۱ برای متن درشت، ارجاع کنترل‌های غیرفعال و رنگ placeholder
+- بررسی کنتراست متن و اجزای رابط با نسبت محاسبه‌شده (WCAG 1.4.3): رنگ‌های inline و کلاس‌ها و بلوک‌های `<style>` با رعایت Specificity، آستانه‌ی ۳ به ۱ برای متن درشت، ارجاع کنترل‌های غیرفعال، رنگ placeholder و ارزیابی سند‌های Dark مستقل با توکن‌های `prefers-color-scheme` و `[data-theme=dark]`
 - نصب به‌صورت PWA و اجرای آفلاین
 - فارسی، انگلیسی، عربی، آلمانی، فرانسوی و اسپانیایی با RTL/LTR واقعی
 - Dark/Light theme و طراحی Responsive
@@ -75,7 +75,7 @@ A11y Inspector is a static, privacy-first HTML accessibility checker. It parses 
 
 - Paste, file upload, and drag-and-drop HTML input
 - Problem, accessible, and complex-form samples
-- Checks for `lang`, `title`, image `alt`, accessible names, headings, main landmark, duplicate IDs, ARIA references, positive `tabindex`, tables, iframes, skip links, viewport, and **WCAG 1.4.3 text & UI contrast with the computed ratio** — inline styles, classes, and `<style>` blocks are resolved through the cascade, large text uses the 3:1 threshold, disabled controls are exempt, and placeholder color is checked
+- Checks for `lang`, `title`, image `alt`, accessible names, headings, main landmark, duplicate IDs, ARIA references, positive `tabindex`, tables, iframes, skip links, viewport, and **WCAG 1.4.3 text & UI contrast with the computed ratio** — inline styles, classes, and `<style>` blocks are resolved with CSS specificity, large text uses the 3:1 threshold, disabled controls are exempt, placeholder color is checked, and dark documents are evaluated against their own tokens (`prefers-color-scheme` blocks and `[data-theme=dark]` rules)
 - 0–100 score with Error/Warning/Notice/Passed counts and audit duration
 - Search and severity filtering
 - Element highlighting in the Preview

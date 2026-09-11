@@ -23,6 +23,8 @@ function extract(kind, name) {
 const DEPS = {
   contrastRatio: ['parseColor', 'channelLum', 'relativeLuminance'],
   relativeLuminance: ['channelLum'],
+  parseCssRules: ['maskAtBlocks'],
+  parsePlaceholderRules: ['maskAtBlocks'],
 };
 
 function load(...names) {
@@ -179,6 +181,40 @@ test('hasDirectText ignores element-only children', () => {
   assert.ok(!hasDirectText({ childNodes: [text('   ')] }));
   assert.ok(!hasDirectText({ childNodes: [el()] }));
   assert.ok(hasDirectText({ childNodes: [el(), text('x')] }));
+});
+
+test('parseMediaRules extracts @media blocks with balanced braces', () => {
+  const { parseMediaRules } = load('parseMediaRules', 'parseCssRules');
+  const css = '@media (min-width: 600px) { p { color: red; } } @media (prefers-color-scheme: dark) { body { background: #111; } .t { color: #eee; } } .outside { color: blue; }';
+  const blocks = parseMediaRules(css);
+  assert.equal(blocks.length, 2);
+  assert.match(blocks[0].condition, /min-width/);
+  assert.match(blocks[1].condition, /prefers-color-scheme/);
+  assert.equal(blocks[1].rules.length, 2);
+  assert.equal(blocks[1].rules[0].selector, 'body');
+  assert.equal(blocks[1].rules[0].decls['background'], '#111');
+});
+
+test('isDarkTokenRule detects dark selectors and ignores others', () => {
+  const { isDarkTokenRule } = load('isDarkTokenRule');
+  assert.ok(isDarkTokenRule('[data-theme="dark"] body'));
+  assert.ok(isDarkTokenRule("[data-theme='dark'] p"));
+  assert.ok(isDarkTokenRule('[data-color-scheme=dark] .card'));
+  assert.ok(isDarkTokenRule('html.dark .content'));
+  assert.ok(isDarkTokenRule('.theme-dark .t'));
+  assert.ok(!isDarkTokenRule('[data-theme="light"] p'));
+  assert.ok(!isDarkTokenRule('.darkness .t'));
+  assert.ok(!isDarkTokenRule('body'));
+});
+
+test('stripDarkAnchor removes dark anchors and keeps the rest', () => {
+  const { stripDarkAnchor } = load('stripDarkAnchor');
+  assert.equal(stripDarkAnchor('[data-theme="dark"] body'), 'body');
+  assert.equal(stripDarkAnchor('html.dark .content'), '.content');
+  assert.equal(stripDarkAnchor('.theme-dark .t'), '.t');
+  assert.equal(stripDarkAnchor('.dark'), 'html');
+  assert.equal(stripDarkAnchor('[data-theme=dark]'), 'html');
+  assert.equal(stripDarkAnchor('.card'), '.card');
 });
 
 test('app.js no longer uses legacy escape/unescape globals', () => {
