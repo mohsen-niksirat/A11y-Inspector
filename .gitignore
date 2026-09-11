@@ -1,0 +1,8 @@
+node_modules/
+package-lock.json
+_preview.html
+_shot*.html
+_release.json
+_resp.json
+*.log
+.DS_Store

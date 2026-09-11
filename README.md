@@ -46,6 +46,17 @@ python -m http.server 4173 --directory A11y-Inspector
 
 سپس به `http://localhost:4173` برو. بازکردن مستقیم فایل هم معمولاً کار می‌کند، اما Static Server برای Preview و Share قابل‌اعتمادتر است.
 
+### اجرای CLI بدون مرورگر
+
+موتور ممیزی بدون رابط کاربری هم اجرا می‌شود (نیازمند Node 18+ و `npm install` برای jsdom):
+
+```bash
+node cli.mjs page.html --json     # خروجی JSON
+node cli.mjs < page.html          # گزارش متنی از stdin
+node cli.mjs page.html --fix      # اعمال اصلاح‌های امن و چاپ HTML اصلاح‌شده
+node cli.mjs --self               # ممیزی خودِ index.html پروژه
+```
+
 ### Deploy روی GitHub Pages
 
 1. محتویات این پوشه در شاخه‌ی `main` ریپازیتوری باشد.
@@ -99,6 +110,17 @@ python -m http.server 4173 --directory A11y-Inspector
 ```
 
 Open `http://localhost:4173`. No package manager, build step, or backend is required. Run the engine tests with `npm test`.
+
+### Headless CLI
+
+The audit engine also runs without the UI (Node 18+, `npm install` for jsdom):
+
+```bash
+node cli.mjs page.html --json     # machine-readable JSON
+node cli.mjs < page.html          # pretty text report from stdin
+node cli.mjs page.html --fix      # apply safe fixes, print the fixed HTML
+node cli.mjs --self               # audit the project's own index.html
+```
 
 ### GitHub Pages
 

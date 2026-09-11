@@ -25,5 +25,8 @@
     "browser",
     "privacy",
     "static-site"
-  ]
+  ],
+  "devDependencies": {
+    "jsdom": "^30.0.1"
+  }
 }
