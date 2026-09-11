@@ -57,9 +57,31 @@ node cli.mjs page.html --fix      # اعمال اصلاح‌های امن و چ�
 node cli.mjs --self               # ممیزی خودِ index.html پروژه
 node cli.mjs page.html --fail-on error   # کد خروج ۱ اگر خطایی وجود داشته باشد
 node cli.mjs page.html --min-score 90    # کد خروج ۱ اگر امتیاز کمتر از ۹۰ باشد
+node cli.mjs page.html --baseline .a11y-baseline.json            # شکست فقط در صورت افت نسبت به خط پایه
+node cli.mjs page.html --baseline b.json --update-baseline       # ثبت خط پایه از وضعیت فعلی
+node cli.mjs page.html --github                                  # حاشیه‌نویسی ::error/::warning برای GitHub Actions
 ```
 
-دو پرچم آخر برای **CI** طراحی شده‌اند: در GitHub Actions یا هر اسکریپت دیگری، اگر سند حداقل یک خطا (یا با `--fail-on warning`، حتی هشدار) داشته باشد یا امتیاز از حد نصاب کمتر باشد، فرآیند با کد ۱ متوقف می‌شود و رگرسیون دسترس‌پذیری بیلد را می‌شکند.
+پرچم‌های **CI**: اگر سند حداقل یک خطا (یا با `--fail-on warning`، حتی هشدار) داشته باشد یا امتیاز از حد نصاب کمتر باشد، فرآیند با کد ۱ متوقف می‌شود و رگرسیون دسترس‌پذیری بیلد را می‌شکند.
+
+**حالت خط پایه (`--baseline`):** به‌جای آستانه‌ی ثابت، وضعیت فعلی را با یک فایل خط پایه‌ی متعهدشده مقایسه می‌کند — فقط «افت امتیاز» یا «افزایش خطا/هشدار» بیلد را می‌شکند، پس اسناد ناقص اما پایدار بیلد را نمی‌شکنند. با `--update-baseline` بسازید و فایل را کامیت کنید:
+
+```json
+{ "tool": "a11y-inspector", "score": 94, "counts": { "errors": 0, "warnings": 1, "notices": 2 } }
+```
+
+**حاشیه‌نویسی‌های Actions (`--github`):** برای هر یافته یک `::error`/`::warning`/`::notice` به stderr می‌نویسد با `title`، `file` و در صورت امکان شماره‌ی خط — تا رگرسیون‌ها مستقیماً در نمای Diff پول‌ریکوئست ظاهر شوند. داخل GitHub Actions خودکار فعال می‌شود (`GITHUB_ACTIONS=true`) و خروجی stdout همچنان JSON تمیز می‌ماند.
+
+### تبدیل چک a11y به چک اجباری
+
+برای اینکه merge بدون وضعیت سبز `a11y/self-audit` ممکن نباشد:
+
+1. به `Settings → Branches → Add branch protection rule` بروید (یا قانون شاخه‌ی `main` را ویرایش کنید).
+2. گزینه‌ی **Require status checks to pass before merging** را فعال کنید.
+3. در جستجو، `a11y/self-audit` را انتخاب کنید (پس از اولین اجرای موفق CI قابل انتخاب می‌شود).
+4. همین کار برای `CI / verify` هم توصیه می‌شود.
+
+نکته: پس از فعال‌شدن، اگر CI قرمز شود merge قفل می‌شود تا رگرسیون برطرف شود؛ برای موارد استثنا، خط پایه را با `--update-baseline` به‌روز کنید و دلیلش را در PR بنویسید.
 
 ### Deploy روی GitHub Pages
 
@@ -126,9 +148,31 @@ node cli.mjs page.html --fix      # apply safe fixes, print the fixed HTML
 node cli.mjs --self               # audit the project's own index.html
 node cli.mjs page.html --fail-on error   # exit 1 if any error finding exists
 node cli.mjs page.html --min-score 90    # exit 1 if score < 90
+node cli.mjs page.html --baseline .a11y-baseline.json            # fail only on regression vs baseline
+node cli.mjs page.html --baseline b.json --update-baseline      # write baseline from the current audit
+node cli.mjs page.html --github                                 # ::error/::warning annotations for GitHub Actions
 ```
 
-The last two flags are built for **CI gating**: in GitHub Actions or any script, the process exits with code 1 when the document has at least one error (or, with `--fail-on warning`, even a warning) or scores below the threshold — so an accessibility regression breaks the build.
+The **CI gating flags** exit with code 1 when the document has at least one error (or, with `--fail-on warning`, even a warning) or scores below the threshold — so an accessibility regression breaks the build.
+
+**Baseline mode (`--baseline`):** instead of a fixed threshold, compare the current audit against a committed baseline file — only a *score drop* or *increase in errors/warnings* fails the build, so imperfect-but-stable documents don't block CI. Create it with `--update-baseline` and commit the file:
+
+```json
+{ "tool": "a11y-inspector", "score": 94, "counts": { "errors": 0, "warnings": 1, "notices": 2 } }
+```
+
+**Actions annotations (`--github`):** writes one `::error`/`::warning`/`::notice` workflow command per finding to stderr with `title`, `file` and — where the snippet can be located — a `line`, so regressions render inline in the pull-request diff view. It auto-enables inside GitHub Actions (`GITHUB_ACTIONS=true`), and stdout stays clean JSON.
+
+### Make the a11y check required
+
+To make merging impossible while `a11y/self-audit` is red:
+
+1. Open `Settings → Branches → Add branch protection rule` (or edit the `main` branch rule).
+2. Enable **Require status checks to pass before merging**.
+3. Search for and select `a11y/self-audit` (it becomes searchable after the first successful CI run on the branch).
+4. Doing the same for `CI / verify` is recommended.
+
+Note: once required, a red CI locks merging until the regression is fixed. For deliberate exceptions, refresh the baseline with `--update-baseline` and explain the change in the PR.
 
 ### GitHub Pages
 
