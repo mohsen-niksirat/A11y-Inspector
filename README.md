@@ -55,7 +55,11 @@ node cli.mjs page.html --json     # خروجی JSON
 node cli.mjs < page.html          # گزارش متنی از stdin
 node cli.mjs page.html --fix      # اعمال اصلاح‌های امن و چاپ HTML اصلاح‌شده
 node cli.mjs --self               # ممیزی خودِ index.html پروژه
+node cli.mjs page.html --fail-on error   # کد خروج ۱ اگر خطایی وجود داشته باشد
+node cli.mjs page.html --min-score 90    # کد خروج ۱ اگر امتیاز کمتر از ۹۰ باشد
 ```
+
+دو پرچم آخر برای **CI** طراحی شده‌اند: در GitHub Actions یا هر اسکریپت دیگری، اگر سند حداقل یک خطا (یا با `--fail-on warning`، حتی هشدار) داشته باشد یا امتیاز از حد نصاب کمتر باشد، فرآیند با کد ۱ متوقف می‌شود و رگرسیون دسترس‌پذیری بیلد را می‌شکند.
 
 ### Deploy روی GitHub Pages
 
@@ -120,7 +124,11 @@ node cli.mjs page.html --json     # machine-readable JSON
 node cli.mjs < page.html          # pretty text report from stdin
 node cli.mjs page.html --fix      # apply safe fixes, print the fixed HTML
 node cli.mjs --self               # audit the project's own index.html
+node cli.mjs page.html --fail-on error   # exit 1 if any error finding exists
+node cli.mjs page.html --min-score 90    # exit 1 if score < 90
 ```
+
+The last two flags are built for **CI gating**: in GitHub Actions or any script, the process exits with code 1 when the document has at least one error (or, with `--fail-on warning`, even a warning) or scores below the threshold — so an accessibility regression breaks the build.
 
 ### GitHub Pages
 

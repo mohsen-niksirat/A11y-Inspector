@@ -7,6 +7,11 @@
  *   node cli.mjs --fix < file.html           # apply safe fixes, print fixed HTML
  *   node cli.mjs page.html --json            # read from a file
  *   node cli.mjs --self                      # audit the bundled index.html
+ *
+ * CI gating:
+ *   node cli.mjs page.html --fail-on error   # exit 1 when any error finding exists
+ *   node cli.mjs page.html --min-score 90    # exit 1 when score < 90
+ *   node cli.mjs page.html --fail-on warning # errors or warnings both fail
  */
 import { readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -21,6 +26,26 @@ const args = process.argv.slice(2);
 const jsonOut = args.includes('--json');
 const fixOut = args.includes('--fix');
 const selfAudit = args.includes('--self');
+
+/** Value of a --flag value pair, or null. */
+const flagValue = (name) => {
+  const i = args.indexOf(name);
+  return i !== -1 && i + 1 < args.length && !args[i + 1].startsWith('--') ? args[i + 1] : null;
+};
+const failOn = (flagValue('--fail-on') || '').toLowerCase();
+const minScoreRaw = flagValue('--min-score');
+if (failOn && !['error', 'warning', 'notice'].includes(failOn)) {
+  console.error(`CLI error: --fail-on accepts error|warning|notice (got "${failOn}").`);
+  process.exit(2);
+}
+let minScore = null;
+if (minScoreRaw !== null) {
+  minScore = Number(minScoreRaw);
+  if (!Number.isFinite(minScore) || minScore < 0 || minScore > 100) {
+    console.error(`CLI error: --min-score accepts a number 0–100 (got "${minScoreRaw}").`);
+    process.exit(2);
+  }
+}
 
 function loadEngine(dom) {
   // The engine is the tail of app.js; run it inside a DOM so the browser
@@ -110,6 +135,30 @@ if (fixOut) {
     html: fixed.html,
   }, null, jsonOut ? 2 : 2));
   process.exit(0);
+}
+
+const gateFailures = [];
+if (failOn) {
+  const severityRank = { notice: 0, warning: 1, error: 2 };
+  const cutoff = severityRank[failOn];
+  const offenders = audit.findings.filter((f) => severityRank[f.severity] >= cutoff);
+  if (offenders.length) {
+    gateFailures.push(`${offenders.length} finding(s) at or above "${failOn}"`);
+    for (const f of offenders.slice(0, 20)) {
+      process.stderr.write(`  gate: [${f.severity.toUpperCase()}] ${f.rule} — ${f.selector || '(document)'}
+`);
+    }
+    if (offenders.length > 20) process.stderr.write(`  gate: …and ${offenders.length - 20} more
+`);
+  }
+}
+if (minScore !== null && score < minScore) {
+  gateFailures.push(`score ${score} < --min-score ${minScore}`);
+}
+if (gateFailures.length) {
+  for (const g of gateFailures) process.stderr.write(`a11y gate failed: ${g}
+`);
+  process.exit(1);
 }
 
 if (jsonOut) {

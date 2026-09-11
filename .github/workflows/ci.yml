@@ -7,6 +7,10 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  statuses: write
+
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -18,7 +22,33 @@ jobs:
           node-version: 20
 
       - name: Syntax check (node --check)
-        run: node --check app.js
+        run: node --check app.js && node --check cli.mjs
 
-      - name: Run engine tests
+      - name: Run tests
         run: npm test
+
+      - name: Self-audit (a11y gate + commit status)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MIN_SCORE: '90'
+        run: |
+          SCORE=$(node cli.mjs --self --json | node -e "let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>console.log(JSON.parse(d).score))")
+          echo "A11y self-audit score: $SCORE/100 (min $MIN_SCORE)"
+
+          STATE=success
+          DESC="A11y score $SCORE/100 (min $MIN_SCORE)"
+          if [ "$SCORE" -lt "$MIN_SCORE" ]; then
+            STATE=failure
+          fi
+
+          curl -s -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
+            -d "{\"state\":\"$STATE\",\"context\":\"a11y/self-audit\",\"description\":\"$DESC\",\"target_url\":\"https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}\"}" \
+            > /dev/null
+
+          if [ "$STATE" = "failure" ]; then
+            echo "::error::A11y self-audit score $SCORE is below the $MIN_SCORE threshold"
+            exit 1
+          fi
