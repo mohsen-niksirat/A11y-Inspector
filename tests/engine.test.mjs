@@ -20,8 +20,22 @@ function extract(kind, name) {
   return line;
 }
 
+const DEPS = {
+  contrastRatio: ['parseColor', 'channelLum', 'relativeLuminance'],
+  relativeLuminance: ['channelLum'],
+};
+
 function load(...names) {
-  const code = `'use strict';\n${names.map((n) => extract(n.startsWith('fn:') ? 'function' : 'const', n.replace(/^fn:/, ''))).join('\n')}\nreturn {${names.map((n) => n.replace(/^fn:/, '')).join(',')}};`;
+  const wanted = new Set();
+  const add = (n) => {
+    const bare = n.replace(/^fn:/, '');
+    if (wanted.has(bare)) return;
+    wanted.add(bare);
+    (DEPS[bare] || []).forEach(add);
+  };
+  names.forEach(add);
+  const kindOf = (n) => (names.includes(`fn:${n}`) ? 'function' : 'const');
+  const code = `'use strict';\n${[...wanted].map((n) => extract(kindOf(n), n)).join('\n')}\nreturn {${[...wanted].join(',')}};`;
   return new Function(code)();
 }
 
@@ -84,6 +98,32 @@ test('canSafeFix only offers fixes for fixable failing rules', () => {
   assert.ok(canSafeFix({ severity: 'warning', rule: 'iframe' }));
   assert.ok(!canSafeFix({ severity: 'pass', rule: 'lang' }));
   assert.ok(!canSafeFix({ severity: 'error', rule: 'image' }));
+});
+
+test('parseColor handles hex, rgb, rgba and rejects junk', () => {
+  const { parseColor } = load('parseColor');
+  assert.deepEqual(parseColor('#fff'), [255, 255, 255]);
+  assert.deepEqual(parseColor('#00ff88'), [0, 255, 136]);
+  assert.deepEqual(parseColor('rgb(12, 34, 56)'), [12, 34, 56]);
+  assert.deepEqual(parseColor('rgba(1, 2, 3, 0.5)'), [1, 2, 3]);
+  assert.equal(parseColor('transparent'), null);
+  assert.equal(parseColor(''), null);
+  assert.equal(parseColor('not-a-color'), null);
+  assert.equal(parseColor('url(bg.png)'), null);
+});
+
+test('contrastRatio implements the WCAG luminance formula', () => {
+  const { contrastRatio } = load('contrastRatio', 'parseColor');
+  assert.ok(Math.abs(contrastRatio([0, 0, 0], [255, 255, 255]) - 21) < 0.01);
+  assert.ok(Math.abs(contrastRatio([255, 255, 255], [255, 255, 255]) - 1) < 0.01);
+  assert.ok(Math.abs(contrastRatio([255, 255, 255], [119, 229, 192]) - 1.53) < 0.05);
+  assert.ok(Math.abs(contrastRatio([255, 255, 255], [7, 19, 31]) - 18.72) < 0.3);
+  assert.equal(contrastRatio(null, [0, 0, 0]), null);
+  assert.equal(contrastRatio([0, 0, 0], null), null);
+  // Symmetry: swapping fg/bg must not change the ratio.
+  const a = contrastRatio([255, 0, 0], [0, 0, 255]);
+  const b = contrastRatio([0, 0, 255], [255, 0, 0]);
+  assert.ok(Math.abs(a - b) < 1e-9);
 });
 
 test('app.js no longer uses legacy escape/unescape globals', () => {

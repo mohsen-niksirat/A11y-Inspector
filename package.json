@@ -1,0 +1,29 @@
+{
+  "name": "a11y-inspector",
+  "version": "1.0.0",
+  "description": "Privacy-first, browser-only HTML accessibility audit tool with sandboxed preview, safe fixes, and multilingual UI.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/engine.test.mjs",
+    "check": "node --check app.js",
+    "verify": "node --check app.js && node --test tests/engine.test.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mohsen-niksirat/A11y-Inspector.git"
+  },
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "wcag",
+    "audit",
+    "browser",
+    "privacy",
+    "static-site"
+  ]
+}

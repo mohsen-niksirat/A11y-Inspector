@@ -3,10 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#07131f">
   <meta name="description" content="A11y Inspector — a privacy-first browser accessibility audit tool">
   <title>A11y Inspector</title>
   <link rel="icon" href="data:,">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <meta name="theme-color" content="#07131f">
+  <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -72,5 +75,10 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <div class="modal-backdrop" id="fixModal" role="dialog" aria-modal="true" aria-labelledby="fixModalTitle"><div class="modal"><h2 id="fixModalTitle" data-i18n="fixModalTitle">اصلاح‌های امن اعمال شدند</h2><p data-i18n="fixModalHint">این تغییرها محافظه‌کارانه هستند و HTML اصلاح‌شده دوباره ممیزی شده است.</p><ul id="fixListModal"></ul><pre id="fixPreviewCode" class="code-preview">—</pre><div class="modal-footer"><button class="button primary" id="closeModal" type="button" data-i18n="close">بستن</button></div></div></div>
   <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+      addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+    }
+  </script>
 </body>
 </html>

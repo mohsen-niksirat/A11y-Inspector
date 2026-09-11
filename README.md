@@ -23,8 +23,18 @@ A11y Inspector یک ابزار Static برای بررسی اولیه‌ی دست
 - اصلاح امن محدود برای `lang`، `title` و عنوان iframe؛ متن alt حدس زده نمی‌شود
 - خروجی JSON و HTML و کپی گزارش
 - Share Link برای HTMLهای کوچک
+- بررسی کنتراست متن با نسبت محاسبه‌شده (WCAG 1.4.3)
+- نصب به‌صورت PWA و اجرای آفلاین
 - فارسی، انگلیسی، عربی، آلمانی، فرانسوی و اسپانیایی با RTL/LTR واقعی
 - Dark/Light theme و طراحی Responsive
+
+### اسکرین‌شات‌ها
+
+<!-- TODO: پس از فعال‌سازی GitHub Pages، اسکرین‌شات اضافه کنید -->
+
+| ممیزی و یافته‌ها | Preview امن | گزارش |
+| --- | --- | --- |
+| ![Audit and findings](docs/screenshots/findings.png) | ![Sandboxed preview](docs/screenshots/preview.png) | ![Report](docs/screenshots/report.png) |
 
 ### اجرا
 
@@ -38,9 +48,12 @@ python -m http.server 4173 --directory A11y-Inspector
 
 ### Deploy روی GitHub Pages
 
-محتویات پوشه‌ی `A11y-Inspector` را در یک Repository قرار بده و از مسیر زیر فعال کن:
-
-`Settings → Pages → Deploy from a branch → main → /(root)`
+1. محتویات این پوشه در شاخه‌ی `main` ریپازیتوری باشد.
+2. در GitHub به مسیر زیر برو:
+   `Settings → Pages → Build and deployment → Source: Deploy from a branch`
+3. شاخه‌ی `main` و پوشه‌ی `/(root)` را انتخاب کن و **Save** بزن.
+4. بعد از حدود یک دقیقه، آدرس سایت در بالای صفحه‌ی Pages نمایش داده می‌شود.
+5. آدرس واقعی را در بخش Screenshots و بالا‌ی همین README به‌جای لینک نمونه قرار بده.
 
 این پروژه به سرویس خارجی نیاز ندارد و برای GitHub Pages مناسب است.
 
@@ -62,15 +75,24 @@ A11y Inspector is a static, privacy-first HTML accessibility checker. It parses 
 
 - Paste, file upload, and drag-and-drop HTML input
 - Problem, accessible, and complex-form samples
-- Checks for `lang`, `title`, image `alt`, accessible names, headings, main landmark, duplicate IDs, ARIA references, positive `tabindex`, tables, iframes, skip links, and viewport
+- Checks for `lang`, `title`, image `alt`, accessible names, headings, main landmark, duplicate IDs, ARIA references, positive `tabindex`, tables, iframes, skip links, viewport, and **WCAG 1.4.3 text contrast with the computed ratio**
 - 0–100 score with Error/Warning/Notice/Passed counts and audit duration
 - Search and severity filtering
 - Element highlighting in the Preview
 - Conservative safe fixes for missing `lang`, document `title`, and iframe titles
 - JSON and HTML report downloads plus copyable report text
 - Hash-based share links for small HTML documents
+- Installable PWA with offline support (service worker + web manifest)
 - Persian, English, Arabic, German, French, and Spanish with real RTL/LTR switching
 - Dark/light theme and responsive layout
+
+### Screenshots
+
+<!-- TODO: add real screenshots after enabling GitHub Pages -->
+
+| Audit & findings | Sandboxed preview | Report |
+| --- | --- | --- |
+| ![Audit and findings](docs/screenshots/findings.png) | ![Sandboxed preview](docs/screenshots/preview.png) | ![Report](docs/screenshots/report.png) |
 
 ### Run locally
 
@@ -78,11 +100,15 @@ A11y Inspector is a static, privacy-first HTML accessibility checker. It parses 
 python -m http.server 4173 --directory A11y-Inspector
 ```
 
-Open `http://localhost:4173`. No package manager, build step, or backend is required.
+Open `http://localhost:4173`. No package manager, build step, or backend is required. Run the engine tests with `npm test`.
 
 ### GitHub Pages
 
-Upload the contents of `A11y-Inspector` to a repository, then enable `Settings → Pages → Deploy from a branch`, using the `main` branch and the root folder.
+1. Make sure the repository content lives on the `main` branch.
+2. Go to `Settings → Pages → Build and deployment → Source: Deploy from a branch`.
+3. Select the `main` branch and the `/(root)` folder, then click **Save**.
+4. After about a minute, the site URL appears at the top of the Pages settings.
+5. Put the real URL in the Screenshots section and the top of this README instead of the sample link.
 
 ### Privacy and scope
 

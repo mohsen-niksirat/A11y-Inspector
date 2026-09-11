@@ -1,0 +1,20 @@
+{
+  "name": "A11y Inspector",
+  "short_name": "A11y Inspector",
+  "description": "Privacy-first, browser-only HTML accessibility audit tool with sandboxed preview and multilingual UI.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#07131f",
+  "theme_color": "#07131f",
+  "lang": "fa",
+  "dir": "auto",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
